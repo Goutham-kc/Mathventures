@@ -5,23 +5,22 @@ from typing import List
 
 app = FastAPI()
 
-class VibrationData(BaseModel):
-    values: List[float]
+class SensorReading(BaseModel):
+    data: List[float]
 
 @app.post("/analyze")
-async def analyze_vibration(data: VibrationData):
-    # Convert to numpy array for math modeling
-    signal = np.array(data.values)
+async def analyze_bridge(reading: SensorReading):
+    # Perform Mathematical Modeling (e.g., FFT or Anomaly Detection)
+    arr = np.array(reading.data)
+    rms = np.sqrt(np.mean(arr**2))
     
-    # Calculate FFT (Mathematical Modeling)
-    fft_result = np.abs(np.fft.fft(signal))
-    dominant_freq = np.argmax(fft_result)
-    
-    # Simple anomaly detection logic
-    status = "healthy" if np.max(signal) < 10.0 else "warning"
+    # Determine health status based on vibration intensity
+    status = "healthy"
+    if rms > 0.5: status = "warning"
+    if rms > 1.2: status = "critical"
     
     return {
-        "dominant_frequency": float(dominant_freq),
         "status": status,
-        "rms_amplitude": float(np.sqrt(np.mean(signal**2)))
+        "intensity": float(rms),
+        "recommendation": "Check structure" if status != "healthy" else "Monitor"
     }
