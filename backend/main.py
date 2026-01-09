@@ -18,79 +18,87 @@ class VibrationData(BaseModel):
 
 def calculate_crlb(snr, n_samples, fs=60):
     """
-    Cramér-Rao Lower Bound for frequency estimation variance.
-    Formula: var(f) >= 12 / ((2*pi)^2 * SNR * N * (N^2 - 1))
+    Cramér–Rao Lower Bound for frequency estimation error (Hz)
     """
-    if snr <= 0: return 0.5 # Default error margin if SNR is bad
-    
-    # Normalized SNR (linear scale)
+    if snr <= 0:
+        return 0.5  # conservative fallback
+
     N = n_samples
-    denom = (4 * (np.pi**2)) * snr * N * (N**2 - 1)
-    variance_normalized = 12 / denom
-    
-    # Scale by sampling frequency to get Hz error
-    return np.sqrt(variance_normalized) * fs
+    denom = (4 * np.pi**2) * snr * N * (N**2 - 1)
+    variance = 12 / denom
+    return np.sqrt(variance) * fs
 
 @app.post("/analyze")
 async def analyze_vibration(data: VibrationData):
-    # 1. Signal Cleaning
+
+    # -------------------------
+    # 1. Signal Pre-processing
+    # -------------------------
     arr = np.array(data.values)
     n_samples = len(arr)
-    
-    if n_samples < 20:
+
+    if n_samples < 50:
         return {"error": "Insufficient data points"}
 
-    # Detrend and normalize
-    arr_centered = arr - np.mean(arr)
-    arr_cleaned = detrend(arr_centered)
-    
-    # Calculate SNR (Signal Power / Noise Power)
-    # We estimate noise from the variance of the detrended signal's residuals
-    signal_power = np.mean(arr_cleaned**2)
-    noise_power = np.var(arr - arr_cleaned) # Approximation of noise floor
-    snr = signal_power / (noise_power + 1e-9) 
+    arr = detrend(arr - np.mean(arr))
 
-    # 2. Spectral Analysis (Welch Method)
-    # Using 2048 NFFT gives us 'interpolated' frequency resolution
-    fs = 60 
-    freqs, psd = welch(arr_cleaned, fs=fs, nfft=2048)
-    
-    # Focus on structural frequencies (1Hz to 30Hz)
+    # -------------------------
+    # 2. SNR Estimation
+    # -------------------------
+    signal_power = np.mean(arr**2)
+    noise_power = np.var(arr)
+    snr = signal_power / (noise_power + 1e-9)
+
+    # -------------------------
+    # 3. Spectral Analysis
+    # -------------------------
+    fs = 60
+    freqs, psd = welch(arr, fs=fs, nfft=2048)
+
     mask = (freqs > 1.0) & (freqs < 30.0)
-    if not any(mask):
+    if not np.any(mask):
         return {"integrity_score": 0, "current_hz": 0}
-        
-    current_peak_freq = freqs[mask][np.argmax(psd[mask])]
 
-    # 3. Logic: Baseline (5s) vs Tracking (3s)
+    freqs_band = freqs[mask]
+    psd_band = psd[mask]
+
+    peak_idx = np.argmax(psd_band)
+    current_peak_freq = freqs_band[peak_idx]
+
+    # -------------------------
+    # 4. Baseline Mode
+    # -------------------------
     if data.is_baseline:
-        storage["baseline_freq"] = current_peak_freq
-        storage["baseline_snr"] = snr
+        storage["baseline_freq"] = float(current_peak_freq)
+        storage["baseline_snr"] = float(snr)
         return {
-            "status": "success", 
-            "hz": round(current_peak_freq, 2),
+            "status": "baseline_set",
+            "hz": round(current_peak_freq, 3),
             "snr": round(snr, 2)
         }
 
-    # 4. Error Analysis & Integrity
-    score = 100.0
-    error_margin = 0.0
-    
-    if storage["baseline_freq"]:
-        # C.R. Rao Error Margin
-        # This tells the judges the theoretical precision of your Hz reading
-        error_margin = calculate_crlb(snr, n_samples, fs)
-        
-        # Integrity calculation (f_curr / f_base)^2
-        # We use the square because stiffness K is proportional to freq^2
-        ratio = current_peak_freq / storage["baseline_freq"]
-        score = (ratio ** 2) * 100
-        score = min(100, max(0, score))
+    # -------------------------
+    # 5. Tracking Mode
+    # -------------------------
+    integrity_score = 100.0
+    error_margin = calculate_crlb(snr, n_samples, fs)
+
+    if storage["baseline_freq"] is not None:
+        baseline = storage["baseline_freq"]
+
+        # Only consider frequency DROPS beyond noise floor
+        freq_drop = baseline - current_peak_freq
+
+        if freq_drop > error_margin:
+            ratio = current_peak_freq / baseline
+            integrity_score = (ratio ** 2) * 100
+
+        integrity_score = min(100.0, max(0.0, integrity_score))
 
     return {
-        "integrity_score": round(score, 1),
+        "integrity_score": round(integrity_score, 1),
         "current_hz": round(current_peak_freq, 3),
-        "baseline_hz": round(storage["baseline_freq"], 3) if storage["baseline_freq"] else 0,
+        "baseline_hz": round(storage["baseline_freq"], 3),
         "error_margin_hz": round(error_margin, 4),
         "confidence": "High" if error_margin < 0.05 else "Low"
     }

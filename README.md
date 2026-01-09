@@ -1,73 +1,62 @@
-# Welcome to your Lovable project
+# Equation-Escape-Hackathon
+A 15-hour coding marathon bringing together developers, designers, and innovators to create exciting, fun, and original projects. 
 
-## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+# SIL(Structure Integrity Lab)
 
-## How can I edit this code?
+## Basic Details
 
-There are several ways of editing your application.
+**Team Name:** TechMavu
 
-**Use Lovable**
+### Team Members
+- **Team Lead:** Aditya Kiran - TKM College of Engineering
+- **Member 2:** Goutham K C - TKM College of Engineering
+- **Member 3:** Sredha Gopan - TKM College of Engineering
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Project Description
+***SIL*** is a low-cost, high-precision Structural Health Monitoring (SHM) system that transforms a standard smartphone into a sophisticated vibration sensor. It utilizes real-time spectral analysis to detect structural micro-shifts and calculate the integrity of infrastructure like bridges and buildings.
 
-Changes made via Lovable will be committed automatically to this repo.
+## The Concept
+The core idea is to measure the natural frequency of a structure—the specific rate at which it vibrates—to assess its health. Because a structure's frequency is directly linked to its stiffness, any drop in that frequency serves as an early warning sign of cracks, loose joints, or material fatigue.
 
-**Use your preferred IDE**
+Structural Mechanics ($f \propto \sqrt{k}$): We use the physical principle that the natural frequency ($f$) is proportional to the square root of stiffness ($k$). A drop in $f$ mathematically proves a loss in structural integrity.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Technical Details
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Technologies Used
+- **Languages:** TypeScript,Python,HTML
+- **Frameworks:** React,FastAPI,TailWind CSS,Vite
+- **Libraries/Assets:** Scipy,Numpy,Recharts,Lucide React,Web DeviceMotion API,TanStack Query
+- **Tools:** Bun,Uvicorn,ngrok,VS Code
 
-Follow these steps:
+### Implementation
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+#### Installation / Setup
+[To build and run the project manually from source:]
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+**Example:**
+```bash
+   git clone https://github.com/Goutham-kc/Mathventures.git
+   cd Mathventures
 ```
 
-**Edit a file directly in GitHub**
+## Project Documentation
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Screenshots (Add at least 3)
 
-**Use GitHub Codespaces**
+![Screenshot1](Add screenshot 1 link)  
+*Add caption explaining what this shows*
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+![Screenshot2](Add screenshot 2 link)  
+*Add caption explaining what this shows*
 
-## What technologies are used for this project?
+![Screenshot3](Add screenshot 3 link)  
+*Add caption explaining what this shows*
 
-This project is built with:
+### Project Demo
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+#### Project Video
+[Add link of your project demo]  
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Deployment
+- **Deployed Version (if any):** [Link to web build]
