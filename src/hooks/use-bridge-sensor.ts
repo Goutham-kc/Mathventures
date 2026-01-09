@@ -1,24 +1,29 @@
-// Proposed hardware sensor hook
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from "react";
 
 export const useBridgeSensor = () => {
-  const [acceleration, setAcceleration] = useState({ x: 0, y: 0, z: 0 });
+  const [isMonitoring, setIsMonitoring] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const handleMotion = (event: DeviceMotionEvent) => {
-      const acc = event.accelerationIncludingGravity;
-      if (acc) {
-        setAcceleration({
-          x: acc.x || 0,
-          y: acc.y || 0,
-          z: acc.z || 0
-        });
+  const startMonitoring = useCallback(async () => {
+    // Check for iOS 13+ permission requirements
+    if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
+      try {
+        const permission = await (DeviceMotionEvent as any).requestPermission();
+        if (permission === 'granted') {
+          setIsMonitoring(true);
+        } else {
+          setError("Permission to access motion sensors was denied.");
+        }
+      } catch (err) {
+        setError("Mobile sensor access failed. Ensure you are using HTTPS.");
       }
-    };
-
-    window.addEventListener('devicemotion', handleMotion);
-    return () => window.removeEventListener('devicemotion', handleMotion);
+    } else {
+      // Non-iOS or older devices usually don't need explicit permission
+      setIsMonitoring(true);
+    }
   }, []);
 
-  return acceleration;
+  const stopMonitoring = () => setIsMonitoring(false);
+
+  return { isMonitoring, startMonitoring, stopMonitoring, error };
 };

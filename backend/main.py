@@ -1,26 +1,26 @@
 from fastapi import FastAPI
-import numpy as np
 from pydantic import BaseModel
 from typing import List
+import numpy as np
 
 app = FastAPI()
 
-class SensorReading(BaseModel):
-    data: List[float]
+class VibrationData(BaseModel):
+    values: List[float]
 
 @app.post("/analyze")
-async def analyze_bridge(reading: SensorReading):
-    # Perform Mathematical Modeling (e.g., FFT or Anomaly Detection)
-    arr = np.array(reading.data)
-    rms = np.sqrt(np.mean(arr**2))
+async def analyze_vibration(data: VibrationData):
+    # Mathematical Modelling: Signal analysis
+    signal = np.array(data.values)
+    rms = np.sqrt(np.mean(signal**2)) if len(signal) > 0 else 0
     
-    # Determine health status based on vibration intensity
+    # Simple logic to determine if the bridge is under stress
     status = "healthy"
-    if rms > 0.5: status = "warning"
-    if rms > 1.2: status = "critical"
+    if rms > 1.5: status = "warning"
+    if rms > 3.0: status = "critical"
     
     return {
         "status": status,
-        "intensity": float(rms),
-        "recommendation": "Check structure" if status != "healthy" else "Monitor"
+        "rms_intensity": float(rms),
+        "data_points_processed": len(signal)
     }
