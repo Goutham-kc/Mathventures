@@ -46,8 +46,8 @@ async def analyze_vibration(data: VibrationData):
         score = (current_peak_freq / baseline_freq) ** 2 * 100
         score = min(100, max(0, score))
 
-    return {
-        "integrity_score": round(score, 1),
-        "current_hz": round(current_peak_freq, 2),
-        "baseline_hz": round(baseline_freq, 2) if baseline_freq else 0
-    }
+   return {
+    "integrity_score": round(score, 1),
+    "current_hz": round(current_peak_freq, 2),
+    "baseline_hz": round(baseline_freq, 2) if baseline_freq else 0 # MUST RETURN THIS EVERY TIME
+}
