@@ -87,6 +87,10 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        "progress-grow": {
+      "0%": { width: "0%" },
+      "100%": { width: "100%" }
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -109,6 +113,7 @@ export default {
         },
       },
       animation: {
+        "progress-grow": "progress-grow 5s linear forwards",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out forwards",

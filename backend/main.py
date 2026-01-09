@@ -2,57 +2,52 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Optional
 import numpy as np
-from scipy import signal
+from scipy.signal import welch, detrend
 
 app = FastAPI()
-
-# Global variable to store the baseline frequency
 baseline_freq = None
 
 class VibrationData(BaseModel):
     values: List[float]
-    is_baseline: Optional[bool] = False
+    is_baseline: bool = False
 
 @app.post("/analyze")
 async def analyze_vibration(data: VibrationData):
     global baseline_freq
     
-    # Step 1: Transform the Data (FFT Analysis)
-    # Using numpy to find the Power Spectral Density
+    # 1. Clean the signal
     arr = np.array(data.values)
-    if len(arr) < 2:
-        return {"error": "Insufficient data"}
+    if len(arr) < 20:
+        return {"error": "Need more data"}
 
-    # Calculate FFT and find Peak Frequency
-    sample_rate = 60  # Typical mobile accelerometer rate
-    frequencies, psd = signal.welch(arr, fs=sample_rate)
-    current_peak_freq = frequencies[np.argmax(psd)]
+    # Detrend removes the 'random' drift/slope from the phone data
+    arr_cleaned = detrend(arr - np.mean(arr))
     
-    # Step 2: Establish a "Golden Baseline"
+    # 2. High-Resolution FFT
+    # Increasing nfft to 2048 makes the Hz reading much more stable
+    freqs, psd = welch(arr_cleaned, fs=60, nfft=2048)
+    
+    # Filter out low-frequency noise (like hand tilt)
+    mask = freqs > 1.0 
+    if not any(mask):
+        return {"integrity_score": 0, "current_hz": 0}
+        
+    current_peak_freq = freqs[mask][np.argmax(psd[mask])]
+    
+    # 3. Handle Logic
     if data.is_baseline:
         baseline_freq = current_peak_freq
-        return {
-            "status": "baseline_captured",
-            "baseline_frequency": float(baseline_freq)
-        }
+        return {"status": "success", "hz": round(baseline_freq, 2)}
 
-    # Step 3: Implement Integrity Score Formula
-    integrity_score = 100
-    status = "healthy"
-    
+    # 4. Calculate Final Score
+    score = 100
     if baseline_freq and baseline_freq > 0:
-        # Stiffness Loss Index: (f_current / f_baseline)^2 * 100
-        integrity_score = (current_peak_freq / baseline_freq)**2 * 100
-        integrity_score = min(100, float(integrity_score)) # Cap at 100%
-
-        # Status Mapping
-        if integrity_score < 80: status = "critical"
-        elif integrity_score < 95: status = "warning"
+        # Stiffness ratio squared
+        score = (current_peak_freq / baseline_freq) ** 2 * 100
+        score = min(100, max(0, score))
 
     return {
-        "status": status,
-        "integrity_score": round(integrity_score, 2),
-        "current_peak_freq": float(current_peak_freq),
-        "baseline_freq": float(baseline_freq) if baseline_freq else None,
-        "recommendation": "Structure stable" if status == "healthy" else "Stiffness loss detected"
+        "integrity_score": round(score, 1),
+        "current_hz": round(current_peak_freq, 2),
+        "baseline_hz": round(baseline_freq, 2) if baseline_freq else 0
     }
