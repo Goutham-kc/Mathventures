@@ -3,13 +3,15 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    // Add the allowedHosts property here to fix the ngrok error
+    allowedHosts: [
+      "noncontemptible-truantly-yaretzi.ngrok-free.dev"
+    ],
     proxy: {
-      // Proxies any request starting with /api to the Python server
       '/api': {
         target: 'http://127.0.0.1:8000',
         changeOrigin: true,
