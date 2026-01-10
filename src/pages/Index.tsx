@@ -19,7 +19,7 @@ const Index = () => {
 
     setTimeout(async () => {
       try {
-        const response = await fetch("/api/analyze", {
+        const response = await fetch("https://mathventures-2.onrender.com/analyze", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ values: buffer.current, is_baseline: isBaseline })
