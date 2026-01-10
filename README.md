@@ -134,6 +134,10 @@ ngrok http 8080
 ### Project Demo
 
 #### Project Video
+
+In the video, first the baseline is set when no objects are on the table, after which heavy objects are added, which causes a decrease in frequency similar to structural weakening or a shift in the mass-to-stiffness ratio of an aging bridge. Adding mass ($m$) without increasing stiffness ($k$) lowers the natural frequency ($f \approx \sqrt{k/m}$).
+SHM Concept: This shift simulates material fatigue or dead-load stress, which the system detects as a drop in the Integrity Score
+
 https://drive.google.com/file/d/1ZcEL84vzJnZxVozQju2WSu8vaLnVVKuy/view?usp=drivesdk
 
 ## Deployment
