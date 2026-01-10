@@ -127,7 +127,7 @@ ngrok http 8080
 
 ### Screenshots
 
-![alt text](<Screenshot (40).png>)
+![alt text](public/Screenshot (40).png)
 ![alt text](public/SIL_MOBILE.jpeg)
 ![alt text](public/SIL_WORKING.jpeg)
 
