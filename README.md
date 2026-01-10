@@ -125,13 +125,13 @@ ngrok http 8080
 
 ## Project Documentation
 
-### Screenshots (Add at least 3)
+### Screenshots
 
-![Screenshot1]()  
+![Screenshot1](https://drive.google.com/file/d/1AtAS9HnlwDJ3IgSjErnxSydvbQwi_JbE/view?usp=sharing)  
 
-![Screenshot2]()  
+![Screenshot2](https://drive.google.com/file/d/1QN3nfqbqkJt0HFth2u-bHOi2636dyBGw/view?usp=sharing)  
 
-![Screenshot3]()  
+![Screenshot3](https://drive.google.com/file/d/1Z7hKPnMlxlOZgVsd6w7TqDuan7qBEenX/view?usp=sharing)  
 
 ### Project Demo
 
@@ -139,4 +139,4 @@ ngrok http 8080
 [Add link of your project demo]  
 
 ## Deployment
-- **Deployed Version (if any):** [Link to web build]
+- **Deployed Version (if any):** [https://noncontemptible-truantly-yaretzi.ngrok-free.dev/]
