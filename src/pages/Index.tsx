@@ -57,7 +57,7 @@ const Index = () => {
       <div className="md:hidden flex items-center justify-between p-4 border-b bg-card sticky top-0 z-50">
         <div className="flex items-center gap-2">
           <Activity className="h-5 w-5 text-primary" />
-          <span className="font-bold tracking-tighter uppercase italic">VibeGuard</span>
+          <span className="font-bold tracking-tighter uppercase italic">SIL</span>
         </div>
         <Sheet>
           <SheetTrigger asChild>

@@ -9,8 +9,8 @@ export const Sidebar = () => {
           <Activity className="h-6 w-6 text-primary" />
         </div>
         <div className="flex flex-col">
-          <span className="font-bold tracking-tight text-xl">VibeGuard</span>
-          <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Sensor Lab</span>
+          <span className="font-bold tracking-tight text-xl">SIL</span>
+          <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Structural Integrity Lab</span>
         </div>
       </div>
 

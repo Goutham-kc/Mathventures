@@ -2,16 +2,16 @@
 A 15-hour coding marathon bringing together developers, designers, and innovators to create exciting, fun, and original projects. 
 
 
-# SIL(Structure Integrity Lab)
+# SIL(Structural Integrity Lab)
 
 ## Basic Details
 
 **Team Name:** TechMavu
 
 ### Team Members
-- **Team Lead:** Aditya Kiran - TKM College of Engineering
-- **Member 2:** Goutham K C - TKM College of Engineering
-- **Member 3:** Sredha Gopan - TKM College of Engineering
+- **Team Lead:** **Aditya Kiran** - **TKM College of Engineering**
+- **Member 2:** **Goutham K C** - **TKM College of Engineering**
+- **Member 3:** **Sredha Gopan** - **TKM College of Engineering**
 
 ## Project Description
 **SIL** is a low-cost, high-precision Structural Health Monitoring (SHM) system that transforms a standard smartphone into a sophisticated vibration sensor. It utilizes real-time spectral analysis to detect structural micro-shifts and calculate the integrity of infrastructure like bridges and buildings.
@@ -127,14 +127,11 @@ ngrok http 8080
 
 ### Screenshots (Add at least 3)
 
-![Screenshot1](Add screenshot 1 link)  
-*Add caption explaining what this shows*
+![Screenshot1]()  
 
-![Screenshot2](Add screenshot 2 link)  
-*Add caption explaining what this shows*
+![Screenshot2]()  
 
-![Screenshot3](Add screenshot 3 link)  
-*Add caption explaining what this shows*
+![Screenshot3]()  
 
 ### Project Demo
 
