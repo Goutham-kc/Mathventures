@@ -9,7 +9,7 @@ A 15-hour coding marathon bringing together developers, designers, and innovator
 **Team Name:** TechMavu
 
 ### Team Members
-- **Team Lead:** **Aditya Kiran** - **TKM College of Engineering**
+- **Team Lead:** **Adithya Kiran** - **TKM College of Engineering**
 - **Member 2:** **Goutham K C** - **TKM College of Engineering**
 - **Member 3:** **Sredha Gopan** - **TKM College of Engineering**
 
